@@ -4,11 +4,12 @@
 // import the mongoose package
 const mongoose = require('mongoose')
 const db = {
-	user: 'testuser',
-	pass: 'password'
+	user: 'yikyik',
+	pass: 'Aa123456'
 }
 
-mongoose.connect(`mongodb://127.0.0.1:27017/gameshop`)
+
+mongoose.connect("mongodb://yikyikyik:Aa123456@cluster0-shard-00-00-5rceq.mongodb.net:27017,cluster0-shard-00-01-5rceq.mongodb.net:27017,cluster0-shard-00-02-5rceq.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true/gameshop")
 mongoose.Promise = global.Promise
 const Schema = mongoose.Schema
 

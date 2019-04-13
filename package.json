@@ -1,17 +1,31 @@
 {
   "name": "gameshop",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "restify": "^4.0.3",
-    "bcrypt": "*",
+	"bcrypt": "*",
     "mongoose": "^4.6.7",
     "request": "^2.67.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yikwebapi/webapi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yikwebapi/webapi/issues"
+  },
+  "homepage": "https://github.com/yikwebapi/webapi#readme",
+  "description": "",
+  "engines": {
+    "node": "8.12.0",
+    "npm": "6.4.1"
   }
+  
 }
