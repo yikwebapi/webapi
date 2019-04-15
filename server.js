@@ -8,13 +8,17 @@ server.use(restify.fullResponse())
 server.use(restify.bodyParser())
 server.use(restify.queryParser())
 server.use(restify.authorizationParser())
-server.use(function(req, res, next) {
-	 res.header("Access-Control-Allow-Origin", "*") 
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept") 
-	next() 
-})
+server.use(restify.CORS());
 
-const bookshop = require('./gameshop.js')
+server.opts(/.*/, function (req,res,next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", req.header("Access-Control-Request-Method"));
+    res.header("Access-Control-Allow-Headers", req.header("Access-Control-Request-Headers"));
+    res.send(200);
+    return next();
+});
+
+const gameshop = require('./gameshop.js')
 const status = {
 	ok: 200,
 	added: 201,
@@ -27,7 +31,7 @@ server.get('/', (req, res, next) => {
 })
 //done
 server.get('/games', (req, res) => {
-	bookshop.search(req, (err, data) => {
+	gameshop.search(req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET')
 		if (err) {
@@ -43,9 +47,9 @@ server.get('/games', (req, res) => {
 
 // insert games
 server.post('/games', (req, res) => {
-	bookshop.addgame(req, (err, data) => {
+	gameshop.addgame(req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
-		res.setHeader('accepts', 'GET')
+		res.setHeader('accepts', 'GET,POST')
 		if (err) {
 			res.send(status.badRequest, {error: err.message})
 		} else {
@@ -61,7 +65,7 @@ server.post('/games', (req, res) => {
 
 
 server.post('/cart', (req, res) => {
-	bookshop.addcart(req, (err, data) => {
+	gameshop.addcart(req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET, POST, DELETE')
 		if (err) {
@@ -75,7 +79,7 @@ server.post('/cart', (req, res) => {
 })
 //done
 server.get('/cart', (req, res) => {
-	bookshop.searchcart(req, (err, data) => {
+	gameshop.searchcart(req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET, POST,DELETE')
 		if (err) {
@@ -88,7 +92,7 @@ server.get('/cart', (req, res) => {
 })
 
 server.del('/cart', (req, res) => {
-	bookshop.deletecart(req, (err, data) => {
+	gameshop.deletecart(req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET, POST,DELETE')
 		if (err) {
@@ -108,7 +112,7 @@ server.del('/cart', (req, res) => {
 
 server.get('/game/:gameID', (req, res) => {
 	const gameID = req.params.gameID
-	bookshop.getDetail(gameID,req, (err, data) => {
+	gameshop.getDetail(gameID,req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET, POST, DELETE, PUT')
 		if (err) {
@@ -123,7 +127,7 @@ server.get('/game/:gameID', (req, res) => {
 
 server.put('/comment/:gameID', (req, res) => {
 	const gameID = req.params.gameID
-	bookshop.changecomment(gameID,req, (err, data) => {
+	gameshop.changecomment(gameID,req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET, POST, DELETE, PUT')
 		if (err) {
@@ -137,7 +141,7 @@ server.put('/comment/:gameID', (req, res) => {
 
 server.post('/comment/:gameID', (req, res) => {
 	const gameID = req.params.gameID
-	bookshop.addcomment(gameID,req, (err, data) => {
+	gameshop.addcomment(gameID,req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET, POST, DELETE, PUT')
 		if (err) {
@@ -149,9 +153,27 @@ server.post('/comment/:gameID', (req, res) => {
 	})
 })
 
+
+server.get('/comment/:gameID', (req, res) => {
+	const gameID = req.params.gameID
+	gameshop.getcomment(gameID,req, (err, data) => {
+		res.setHeader('content-type', 'application/json')
+		res.setHeader('accepts', 'GET, POST, DELETE, PUT')
+		if (err) {
+			res.send(status.badRequest, {error: err.message})
+		} else {
+			res.send(status.added, {user: data})
+		}
+		res.end()
+	})
+})
+
+
+
+
 server.del('/comment/:gameID', (req, res) => {
 	const gameID = req.params.gameID
-	bookshop.deletecomment(gameID,req, (err, data) => {
+	gameshop.deletecomment(gameID,req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET, POST, DELETE, PUT')
 		if (err) {
@@ -166,7 +188,7 @@ server.del('/comment/:gameID', (req, res) => {
 
 //register
 server.post('/accounts', (req, res) => {
-	bookshop.addaccount(req, (err, data) => {
+	gameshop.addaccount(req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET, POST')
 		if (err) {
@@ -181,7 +203,7 @@ server.post('/accounts', (req, res) => {
 
 //login
 server.get('/logins', (req, res) => {
-	bookshop.loginaccount(req, (err, data) => {
+	gameshop.loginaccount(req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET')
 		if (err) {
@@ -198,8 +220,8 @@ server.get('/logins', (req, res) => {
 
 
 //show user detail
-server.post('/profile', (req, res) => {
-	bookshop.getprofile(req, (err, data) => {
+server.get('/profile', (req, res) => {
+	gameshop.getprofile(req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET, POST, PUT')
 		if (err) {
@@ -214,7 +236,7 @@ server.post('/profile', (req, res) => {
 
 // update profile
 server.put('/profile', (req, res) => {
-	bookshop.updateprofile(req, (err, data) => {
+	gameshop.updateprofile(req, (err, data) => {
 		res.setHeader('content-type', 'application/json')
 		res.setHeader('accepts', 'GET, POST, PUT')
 		if (err) {

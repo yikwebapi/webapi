@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "restify": "^4.0.3",
-	"bcrypt": "*",
+    "bcrypt": "*",
     "mongoose": "^4.6.7",
     "request": "^2.67.0"
   },
@@ -27,5 +27,4 @@
     "node": "8.12.0",
     "npm": "6.4.1"
   }
-  
 }
