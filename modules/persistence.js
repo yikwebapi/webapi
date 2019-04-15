@@ -71,7 +71,6 @@ exports.addGames = details => new Promise( (resolve, reject) => {
 exports.searchgamebytype = type => new Promise( (resolve, reject) => {
 	schema.Game.find({type: type}, (err, docs) => {
 		if (err) reject(new Error('database error'))
-		if (!docs.length) reject(new Error(null))
 		resolve(docs)
 	})
 })
@@ -163,7 +162,6 @@ exports.insertcart = details => new Promise( (resolve, reject) => {
 exports.searchC = username => new Promise( (resolve, reject) => {
 	schema.Cart.find({uAccount: username}, (err, docs) => {
 		if (err) reject(new Error('database error'))
-		if (docs.length == 0) reject(new Error("null"))
 		resolve(docs)
 	})
 })
@@ -184,6 +182,14 @@ exports.deleteC = (username) => new Promise( (resolve, reject) => {
 		reject(new Error('invalid comment object'))
 	}
 	schema.Cart.deleteMany({uAccount: username},(err, docs) => {
+		if (err) reject(new Error('database error'))
+		resolve(docs)
+	})
+})
+
+
+exports.searchcommentbytype = (gameid) => new Promise( (resolve, reject) => {
+	schema.Comment.find({gameId: gameid}, (err, docs) => {
 		if (err) reject(new Error('database error'))
 		resolve(docs)
 	})

@@ -478,3 +478,36 @@ exports.getCartGame = (request, gamedata) => new Promise( (resolve, reject) => {
 
 	resolve({gamedata: clean})
 })
+
+
+exports.getcomment = (gid,request, callback) => {
+	auth.getHeaderCredentials(request).then( credentials => {
+		this.username = credentials.Account
+		this.password = credentials.password
+		return auth.hashPassword(credentials)
+	}).then( credentials => {
+		return persistence.getCredentials(credentials)
+	}).then( account => {
+		const hash = account[0].password
+		return auth.checkPassword(this.password, hash)
+	}).then(()  => {
+		return persistence.searchcommentbytype(gid);
+	}).then( comment => {
+		return this.getComment(request, comment)
+	}).then(test => {
+		callback(null,test)
+	}).catch( err => {
+		callback(err)
+	})
+}
+
+exports.getComment = (request, data) => new Promise( (resolve, reject) => {
+	const clean = data.map(element => {
+		return {
+			account: element.uAccount,
+			comment: element.comment,
+		}
+	})
+
+	resolve({Comment: clean})
+})
