@@ -28,6 +28,8 @@ After that:
 
 The backend api server will be started.
 
-** schema/mongosetting.js is mongodb setting  and create table**
-** u can change the mongodb connect in line 12 **
-** For example,if you want to use local mongodb , change it to 127.0.0.1:27017 to use the local mongodb**
+**schema/mongosetting.js is mongodb setting  and create table**
+
+**u can change the mongodb connect in line 12**
+
+**For example,if you want to use local mongodb , change it to 127.0.0.1:27017 to use the local mongodb**
