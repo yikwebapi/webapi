@@ -19,7 +19,7 @@ Open Visual Studio Code
 
 In Terminal:
 
-**npm install --production**
+**npm install**
 
 After that:
 
